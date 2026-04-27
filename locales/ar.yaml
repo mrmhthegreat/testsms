@@ -1,0 +1,49 @@
+# SMS Gateway Locales — Arabic
+title: "بوابة الرسائل"
+subtitle: "لوحة تحكم قائمة انتظار الرسائل عالية الأداء"
+nav_send: "إرسال رسالة"
+nav_history: "السجل"
+lang_toggle: "English"
+
+# Form
+form_title: "إنشاء رسالة"
+label_phone: "رقم الهاتف"
+label_message: "الرسالة"
+placeholder_phone: "+966 5X XXX XXXX"
+placeholder_message: "اكتب رسالتك هنا..."
+btn_send: "إرسال الرسالة"
+segment_info: "الجزء %d · %d حرف متبقٍ (ترميز %s)"
+
+# Bulk Form
+tab_single: "رسالة فردية"
+tab_bulk: "رسائل جماعية"
+label_phones: "أرقام الهواتف (رقم في كل سطر)"
+placeholder_phones: "+1234567890\n+0987654321\n+966501234567"
+help_phones: "افصل بين الأرقام بأسطر جديدة، مسافات، أو فواصل."
+btn_send_bulk: "إرسال المجموعة"
+
+# Status
+status_queued: "في الانتظار"
+status_sending: "جارٍ الإرسال..."
+status_delivered: "تم التسليم"
+
+# Logs
+redis_logs: "سجلات الخادم (Redis)"
+
+# History table
+history_title: "سجل الرسائل"
+col_id: "المعرّف"
+col_phone: "الهاتف"
+col_preview: "معاينة"
+col_segments: "الأجزاء"
+col_encoding: "الترميز"
+col_status: "الحالة"
+col_time: "الوقت"
+
+# Alerts
+alert_success: "تمت إضافة الرسالة إلى قائمة الانتظار بنجاح!"
+alert_error: "فشل إرسال الرسالة. يرجى المحاولة مرة أخرى."
+empty_history: "لم يتم إرسال أي رسائل بعد."
+
+# Footer
+footer_text: "بوابة الرسائل · GoFiber + Redis + HTMX"

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="{{.Lang}}" dir="{{.Dir}}">
+<head>
+  <meta charset="UTF-8">
+  <title>{{t "title"}}</title>
+  
+  <!-- HTMX -->
+  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+  <!-- Alpine.js -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+  <style>
+    /* CLEAN & MINIMAL CSS (No Tailwind) */
+    :root {
+      --bg: #fafafa;
+      --surface: #ffffff;
+      --border: #eaebed;
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --radius: 8px;
+    }
+    html[dir="rtl"] {
+      font-family: system-ui, -apple-system, sans-serif, 'Arial';
+    }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      margin: 0;
+      padding: 2rem;
+      line-height: 1.5;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* HEADER */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    .lang-toggle {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    /* TABS */
+    .tabs {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .tab {
+      padding: 0.5rem 1.5rem;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .tab.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    /* FORMS */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-family: inherit;
+      box-sizing: border-box;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+    .help-text {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.3rem;
+    }
+    
+    .btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius);
+      font-weight: 500;
+      cursor: pointer;
+      width: 100%;
+      font-size: 1rem;
+    }
+    .btn:hover { background: var(--primary-hover); }
+    .btn:disabled { opacity: 0.7; cursor: not-allowed; }
+
+    /* TABLE */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    html[dir="rtl"] th, html[dir="rtl"] td { text-align: right; }
+    th {
+      background: #f9fafb;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    .center { text-align: center !important; }
+    .mono { font-family: monospace; }
+    .small { font-size: 0.8rem; color: var(--text-muted); }
+    .preview { max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* BADGES */
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.6rem;
+      border-radius: 99px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: #f3f4f6;
+      color: #374151;
+    }
+    .badge-queued { background: #fef3c7; color: #92400e; }
+    .badge-sending { background: #dbeafe; color: #1e40af; }
+    .badge-delivered { background: #d1fae5; color: #065f46; }
+    .error-msg { background: #fee2e2; color: #991b1b; padding: 1rem; border-radius: var(--radius); font-weight: 500; font-size: 0.9rem; }
+    .enc-gsm { color: var(--success); font-weight: 600; }
+    .enc-unicode { color: var(--primary); font-weight: 600; }
+
+    /* HTMX Indicators */
+    .htmx-indicator { display: none; margin-left: 0.5rem; font-size: 0.9rem; }
+    .htmx-request .htmx-indicator { display: inline; }
+  </style>
+</head>
+<body x-data="{ tab: 'single' }">
+
+<div class="container">
+  
+  <header class="header">
+    <h1>{{t "title"}} <span style="color: var(--text-muted); font-weight: normal; font-size: 1rem;">| Simple UI</span></h1>
+    <a href="?lang={{.ToggleLang}}" class="lang-toggle">
+      {{t "lang_toggle"}}
+    </a>
+  </header>
+
+  <div class="tabs">
+    <button class="tab" :class="tab === 'single' ? 'active' : ''" @click="tab = 'single'">{{t "tab_single"}}</button>
+    <button class="tab" :class="tab === 'bulk' ? 'active' : ''" @click="tab = 'bulk'">{{t "tab_bulk"}}</button>
+  </div>
+
+  <!-- SINGLE SMS FORM -->
+  <div class="card" x-show="tab === 'single'">
+    <h2 style="margin-top: 0;">{{t "form_title"}}</h2>
+    <form hx-post="/send-sms" hx-target="#history-body" hx-swap="afterbegin" hx-on::after-request="if(event.detail.successful) this.reset()">
+      <div class="form-group">
+        <label>{{t "label_phone"}}</label>
+        <input type="text" name="phone" required placeholder="{{t "placeholder_phone"}}">
+      </div>
+      <div class="form-group">
+        <label>{{t "label_message"}}</label>
+        <textarea name="message" required placeholder="{{t "placeholder_message"}}"></textarea>
+      </div>
+      <button type="submit" class="btn">
+        {{t "btn_send"}} <span class="htmx-indicator">...</span>
+      </button>
+    </form>
+  </div>
+
+  <!-- BULK SMS FORM -->
+  <div class="card" x-show="tab === 'bulk'" style="display: none;">
+    <h2 style="margin-top: 0;">{{t "tab_bulk"}}</h2>
+    <form hx-post="/send-bulk" hx-target="#history-body" hx-swap="afterbegin" hx-on::after-request="if(event.detail.successful) this.reset()">
+      <div class="form-group">
+        <label>{{t "label_phones"}}</label>
+        <textarea name="phones" required placeholder="+1234567890&#10;+0987654321" style="min-height: 120px; font-family: monospace;"></textarea>
+        <div class="help-text">{{t "help_phones"}}</div>
+      </div>
+      <div class="form-group">
+        <label>{{t "label_message"}}</label>
+        <textarea name="message" required placeholder="{{t "placeholder_message"}}"></textarea>
+      </div>
+      <button type="submit" class="btn" style="background: var(--text-main);">
+        {{t "btn_send_bulk"}} <span class="htmx-indicator">...</span>
+      </button>
+    </form>
+  </div>
+
+  <!-- HISTORY MODULE -->
+  <div class="card" style="padding: 0; overflow: hidden; border: none; box-shadow: none;">
+    <h3 style="margin-bottom: 1rem;">{{t "history_title"}}</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>{{t "col_id"}}</th>
+          <th>{{t "col_phone"}}</th>
+          <th>{{t "col_preview"}}</th>
+          <th class="center">{{t "col_segments"}}</th>
+          <th>{{t "col_encoding"}}</th>
+          <th>{{t "col_status"}}</th>
+          <th>{{t "col_time"}}</th>
+        </tr>
+      </thead>
+      <tbody id="history-body">
+        <!-- New rows injected here via HTMX -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- REDIS LOGS MODULE -->
+  <div class="card" style="background: #111827; color: var(--success); overflow: hidden; margin-top: 2rem;">
+    <h3 style="margin-top: 0; color: #fff; display: flex; justify-content: space-between; align-items: center;">
+      <span>{{t "redis_logs"}}</span>
+      <span style="font-size: 0.8rem; border: 1px solid var(--success); padding: 0.1rem 0.5rem; border-radius: 99px;">● Live</span>
+    </h3>
+    <pre id="redis-terminal" hx-get="/redis-logs" hx-trigger="every 1s" style="margin: 0; font-family: monospace; font-size: 0.85rem; height: 160px; overflow-y: auto; white-space: pre-wrap;">Connecting to Redis stream...</pre>
+  </div>
+
+</div>
+
+<script>
+  document.body.addEventListener('htmx:afterSwap', function(evt) {
+    if (evt.detail.target && evt.detail.target.id === 'redis-terminal') {
+      // Auto-scroll terminal to bottom
+      evt.detail.target.scrollTop = evt.detail.target.scrollHeight;
+    }
+  });
+</script>
+
+</body>
+</html>

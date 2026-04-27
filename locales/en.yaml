@@ -1,0 +1,49 @@
+# SMS Gateway Locales — English
+title: "SMS Gateway"
+subtitle: "High-Performance Message Queue Dashboard"
+nav_send: "Send SMS"
+nav_history: "History"
+lang_toggle: "العربية"
+
+# Form
+form_title: "Compose Message"
+label_phone: "Phone Number"
+label_message: "Message"
+placeholder_phone: "+1 234 567 8900"
+placeholder_message: "Type your message here..."
+btn_send: "Send Message"
+segment_info: "Segment %d · %d chars remaining (%s encoding)"
+
+# Bulk Form
+tab_single: "Single SMS"
+tab_bulk: "Bulk SMS"
+label_phones: "Phone Numbers (One per line)"
+placeholder_phones: "+1234567890\n+0987654321\n+966501234567"
+help_phones: "Separate numbers by newlines, spaces, or commas."
+btn_send_bulk: "Send Bulk"
+
+# Status
+status_queued: "Queued"
+status_sending: "Sending..."
+status_delivered: "Delivered"
+
+# Logs
+redis_logs: "Redis Worker Logs"
+
+# History table
+history_title: "Message History"
+col_id: "ID"
+col_phone: "Phone"
+col_preview: "Preview"
+col_segments: "Segments"
+col_encoding: "Encoding"
+col_status: "Status"
+col_time: "Time"
+
+# Alerts
+alert_success: "Message queued successfully!"
+alert_error: "Failed to send message. Please try again."
+empty_history: "No messages sent yet."
+
+# Footer
+footer_text: "SMS Gateway · GoFiber + Redis + HTMX"
